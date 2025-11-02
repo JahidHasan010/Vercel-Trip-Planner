@@ -1,4 +1,3 @@
-/ /frontend/components/TripResult.tsx
 
 "use client";
 import { motion } from "framer-motion";
@@ -31,25 +30,7 @@ export default function TripResult({ result, isLoading, statusLog, error }: Trip
     </div>
   );
 
-//   const renderItineraryContent = (text: string) => (
-//   <div className="prose max-w-none bg-white rounded-xl shadow-inner border border-gray-200 p-6 leading-relaxed text-gray-800 overflow-x-auto">
-//     <ReactMarkdown
-//       components={{
-//         table: ({ node, ...props }) => (
-//           <table className="table-auto border-collapse border border-gray-300 w-full" {...props} />
-//         ),
-//         th: ({ node, ...props }) => (
-//           <th className="border border-gray-300 bg-gray-100 px-4 py-2 text-left" {...props} />
-//         ),
-//         td: ({ node, ...props }) => (
-//           <td className="border border-gray-300 px-4 py-2" {...props} />
-//         ),
-//       }}
-//     >
-//       {text}
-//     </ReactMarkdown>
-//   </div>
-// );
+
 
   // Content rendering based on state
   let content: React.ReactNode;
