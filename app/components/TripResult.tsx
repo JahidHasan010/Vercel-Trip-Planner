@@ -1,5 +1,3 @@
-
-// ...existing code...
 "use client";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
@@ -30,6 +28,8 @@ export default function TripResult({ result, isLoading, statusLog, error }: Trip
       <ReactMarkdown>{text}</ReactMarkdown>
     </div>
   );
+
+
 
   // Content rendering based on state
   let content: React.ReactNode;
@@ -113,4 +113,3 @@ export default function TripResult({ result, isLoading, statusLog, error }: Trip
     </div>
   );
 }
-// ...existing code...
