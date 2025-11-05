@@ -14,7 +14,8 @@ export interface TripResponse {
 }
 
 const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "https://trip-planner-ai-agents-fastapi.onrender.com";
+  // process.env.NEXT_PUBLIC_BACKEND_URL || "https://trip-planner-ai-agents-fastapi.onrender.com";
+  process.env.NEXT_PUBLIC_BACKEND_URL || "https://backend-trip-planner.onrender.com";
 
 export async function sendTripRequest(data: TripRequest): Promise<TripResponse> {
   const response = await fetch(`${BACKEND_URL}/api/v1/plan-trip`, {
