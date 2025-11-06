@@ -63,9 +63,22 @@ body {
   padding-left: 0.5rem;
 }
 
-.header-bg {
+/* .header-bg {
   background: linear-gradient(rgba(18, 75, 234, 0.85), rgba(111, 132, 202, 0.85)),
     url("https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80")
       no-repeat center center;
   background-size: cover;
+} */
+
+
+body {
+  height: 100vh; /* full screen height */
+  margin: 0;
+  background:
+    /* url("https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80") */
+    url("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05")
+    no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed; /* keeps it static on scroll */
+  
 }

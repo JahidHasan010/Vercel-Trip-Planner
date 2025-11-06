@@ -22,12 +22,196 @@ export default function TripResult({ result, isLoading, statusLog, error }: Trip
     }
   };
 
-  // Render markdown itinerary content
-  const renderItineraryContent = (text: string) => (
-    <div className="prose max-w-none bg-white rounded-xl shadow-inner border border-gray-200 p-6 leading-relaxed text-gray-800">
-      <ReactMarkdown>{text}</ReactMarkdown>
+  // // Render markdown itinerary content
+  // const renderItineraryContent = (text: string) => (
+  //   <div className="prose max-w-none bg-white rounded-xl shadow-inner border border-gray-200 p-6 leading-relaxed text-gray-800">
+  //     <ReactMarkdown>{text}</ReactMarkdown>
+  //   </div>
+  // );
+
+  const renderItineraryContent = (text: string) => {
+  if (!text) return null;
+
+  const lines = text.split(/\n+/).filter(line => line.trim() !== "");
+  const mainTitle = lines.length > 0 ? lines[0].trim() : "";
+  const contentLines = lines.slice(1);
+
+  const content: React.ReactNode[] = [];
+  let currentList: string[] = [];
+
+  // Helper to flush current bullet list
+  const flushList = (key: string) => {
+    if (currentList.length > 0) {
+      content.push(
+        <ul
+          key={`list-${key}`}
+          className="ml-6 list-disc text-gray-700 space-y-1"
+        >
+          {currentList.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
+
+  // 🎯 Flexible section header patterns
+  const headerPatterns = [
+    {
+      regex: /(Overview|Trip Overview|Summary|Introduction)/i,
+      className:
+        "text-2xl font-bold text-blue-700 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "🌍",
+    },
+    {
+      regex: /(Quick budget snapshot|Budget breakdown|Cost overview)/i,
+      className:
+        "text-2xl font-bold text-amber-600 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "💰",
+    },
+    {
+      regex: /(High-level daily plan|Daily itinerary|Schedule)/i,
+      className:
+        "text-2xl font-bold text-green-700 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "📅",
+    },
+    {
+      regex: /(Free & low-cost activities|Free activities|Budget-friendly ideas)/i,
+      className:
+        "text-2xl font-bold text-indigo-600 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "🪙",
+    },
+    {
+      regex: /(Paid activities|Tickets & Tours|Paid experiences)/i,
+      className:
+        "text-2xl font-bold text-rose-600 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "🎟️",
+    },
+    {
+      regex: /(Packing suggestions|Packing checklist|Family packing tips|Packing & gear)/i,
+      className:
+        "text-2xl font-bold text-yellow-600 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "🎒",
+    },
+    {
+      regex: /(Family travel tips|Travel Tips & Safety Notes|Travel tips)/i,
+      className:
+        "text-2xl font-bold text-purple-700 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "🛡️",
+    },
+    {
+      regex: /(Optional add-ons|Next steps|Checklist)/i,
+      className:
+        "text-2xl font-bold text-teal-700 mt-6 mb-2 border-b border-gray-200 pb-1",
+      icon: "✅",
+    },
+  ];
+
+  // 🔍 Parse content line-by-line
+  contentLines.forEach((line, index) => {
+    const trimmed = line.trim();
+    const key = `${index}-${trimmed.slice(0, 10)}`;
+
+    // Match predefined headers
+    const matchedHeader = headerPatterns.find(h => h.regex.test(trimmed));
+    if (matchedHeader) {
+      flushList(key);
+      content.push(
+        <h2 key={key} className={matchedHeader.className}>
+          {matchedHeader.icon} {trimmed}
+        </h2>
+      );
+      return;
+    }
+
+    // 🧭 Detect “Day 1 — …” style titles
+    if (/^Day\s*\d+/i.test(trimmed)) {
+      flushList(key);
+      content.push(
+        <h3
+          key={key}
+          className="text-xl font-semibold text-[var(--vacai-blue)] mt-5 mb-2 flex items-center gap-2"
+        >
+          🧭 {trimmed}
+        </h3>
+      );
+      return;
+    }
+
+    // 📋 Subsection headers (Morning, Evening, etc.)
+    if (
+      /^(Morning|Afternoon|Evening|Recommended restaurants|Accommodation suggestion|Estimated daily cost)/i.test(
+        trimmed
+      )
+    ) {
+      flushList(key);
+      content.push(
+        <h4 key={key} className="text-lg font-bold text-gray-700 mt-3 mb-1">
+          {trimmed}
+        </h4>
+      );
+      return;
+    }
+
+    // 🔹 Bullet points
+    if (/^[-•]\s*/.test(trimmed)) {
+      currentList.push(trimmed.replace(/^[-•]\s*/, ""));
+      return;
+    }
+
+    // 🧾 Label-value lines (e.g. "Location: Tokyo")
+    if (trimmed.includes(":")) {
+      flushList(key);
+      const [label, value] = trimmed.split(/:(.+)/);
+      content.push(
+        <p key={key} className="text-gray-700">
+          <span className="font-semibold text-gray-800">
+            {label.trim()}:
+          </span>
+          {value ? ` ${value.trim()}` : ""}
+        </p>
+      );
+      return;
+    }
+
+    // ⚙️ Fallback: automatically bold probable section titles
+    if (
+      /^[A-Z][a-z].*(activities|suggestion|checklist|tips|overview|plan|cost|gear)/i.test(
+        trimmed
+      )
+    ) {
+      flushList(key);
+      content.push(
+        <h4 key={key} className="text-lg font-bold text-gray-800 mt-3 mb-1">
+          {trimmed}
+        </h4>
+      );
+      return;
+    }
+
+    // 🧍 Normal text
+    flushList(key);
+    content.push(
+      <p key={key} className="text-gray-700">
+        {trimmed}
+      </p>
+    );
+  });
+
+  if (currentList.length > 0) flushList("end");
+
+  return (
+    <div className="max-w-none bg-white rounded-xl shadow-inner border border-gray-200 p-6 leading-relaxed text-gray-800 space-y-3">
+      {mainTitle && (
+        <h1 className="text-3xl font-extrabold text-[var(--vacai-blue)] border-b pb-3 mb-4">
+          {mainTitle}
+        </h1>
+      )}
+      {content}
     </div>
   );
+};
 
 
 
