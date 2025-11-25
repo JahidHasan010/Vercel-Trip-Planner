@@ -51,7 +51,7 @@ export default function TripResult({ result, isLoading, statusLog, error }: Trip
     content = (
       <div className="flex flex-col items-center justify-center text-center text-gray-500">
         <Loader2 className="w-14 h-14 text-[var(--vacai-blue)] animate-spin mb-5" />
-        <p className="text-xl font-bold text-gray-600">AI Agent is Crafting Your Journey...</p>
+        <p className="text-xl font-bold text-gray-600">Crafting Your Journey...</p>
       </div>
     );
   } 

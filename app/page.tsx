@@ -83,8 +83,8 @@ export default function Page() {
               </svg>
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight"> Trip Planner • AI Agents</h1>
-              <p className="text-blue-200 mt-1 text-lg">💫 Your Next Adventure, Perfectly Designed by Artificial Intelligence.</p>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">💫 CelestiaJourney ✨</h1>
+              <p className="text-blue-200 mt-1 text-lg">💎 “Heavenly Adventures, Perfectly Designed” 🌠</p>
             </div>
           </div>
         </div>
